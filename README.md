@@ -1,1 +1,1 @@
-# Tic_Tac_Toe-project
+Tic-Tac-Toe is a classic two-player game that is simple to learn but offers significant depth in strategy. The game is played on a 3x3 grid, where players take turns marking a cell with their respective symbols, usually "X" and "O". The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row wins the game. This project involves implementing the Tic-Tac-Toe game in Java, providing an interactive and enjoyable experience for users.
