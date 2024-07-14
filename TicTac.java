@@ -2,7 +2,16 @@ import java.util.Scanner;
 
 class Main {
   public static void main(String[] args) {
-    char[][] board = new char[3][3];
+    Scanner scanner = new Scanner(System.in);
+    
+    System.out.print("Enter board size: ");
+    int boardSize = scanner.nextInt();
+    if (boardSize < 3) {
+      System.out.println("Board size must be at least 3.");
+      return;
+    }
+
+    char[][] board = new char[boardSize][boardSize];
     for (int row = 0; row < board.length; row++) {
       for (int col = 0; col < board[row].length; col++) {
         board[row][col] = ' ';
@@ -11,21 +20,27 @@ class Main {
 
     char player = 'X';
     boolean gameOver = false;
-    Scanner scanner = new Scanner(System.in);
 
     while (!gameOver) {
       printBoard(board);
-      System.out.print("Player " + player + " enter: ");
+      System.out.print("Player " + player + " enter row and column: ");
       int row = scanner.nextInt();
       int col = scanner.nextInt();
       System.out.println();
+
+      if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
+        System.out.println("Invalid move. Please enter a number between 0 and " + (boardSize - 1) + ".");
+        continue;
+      }
 
       if (board[row][col] == ' ') {
         board[row][col] = player; // place the element
         gameOver = haveWon(board, player);
         if (gameOver) {
+          printBoard(board);
           System.out.println("Player " + player + " has won!");
         } else if (isBoardFull(board)) {
+          printBoard(board);
           System.out.println("The game is a draw!");
           gameOver = true;
         } else {
@@ -35,34 +50,53 @@ class Main {
         System.out.println("Invalid move. Try again!");
       }
     }
-    printBoard(board);
   }
 
   public static boolean haveWon(char[][] board, char player) {
+    int size = board.length;
+
     // check the rows
-    for (int row = 0; row < board.length; row++) {
-      if (board[row][0] == player && board[row][1] == player && board[row][2] == player) {
-        return true;
+    for (int row = 0; row < size; row++) {
+      boolean win = true;
+      for (int col = 0; col < size; col++) {
+        if (board[row][col] != player) {
+          win = false;
+          break;
+        }
       }
+      if (win) return true;
     }
 
     // check the columns
-    for (int col = 0; col < board[0].length; col++) {
-      if (board[0][col] == player && board[1][col] == player && board[2][col] == player) {
-        return true;
+    for (int col = 0; col < size; col++) {
+      boolean win = true;
+      for (int row = 0; row < size; row++) {
+        if (board[row][col] != player) {
+          win = false;
+          break;
+        }
       }
+      if (win) return true;
     }
 
     // check the diagonals
-    if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
-      return true;
+    boolean win = true;
+    for (int i = 0; i < size; i++) {
+      if (board[i][i] != player) {
+        win = false;
+        break;
+      }
     }
+    if (win) return true;
 
-    if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
-      return true;
+    win = true;
+    for (int i = 0; i < size; i++) {
+      if (board[i][size - 1 - i] != player) {
+        win = false;
+        break;
+      }
     }
-
-    return false;
+    return win;
   }
 
   public static boolean isBoardFull(char[][] board) {
